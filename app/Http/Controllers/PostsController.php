@@ -10,6 +10,7 @@ class PostsController extends Controller
     public function index()
     {
         $data = Posts::get();
-        return $data;
+        // return $data;
+        return view('Posts', compact('data'));
     }
 }
