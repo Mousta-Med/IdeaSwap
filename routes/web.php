@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PostController;
+use App\Http\Controllers\PostsController;
+use App\Http\Controllers\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,6 +16,15 @@ use App\Http\Controllers\PostController;
 */
 
 Auth::routes();
-Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/posts', [App\Http\Controllers\PostsController::class, 'index']);
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/test', [HomeController::class, 'test']);
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/posts', [PostsController::class, 'index']);
+    Route::get('/add-post', [PostsController::class, 'addpost']);
+    Route::post('/save-post', [PostsController::class, 'savepost']);
+    Route::get('/delete-post/{id}', [PostsController::class, 'deletepost']);
+    Route::get('/update-post/{id}', [PostsController::class, 'updatepost']);
+    Route::post('/edite-post', [PostsController::class, 'editepost']);
+});
