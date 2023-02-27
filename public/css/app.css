@@ -1,12 +1,39 @@
 * {
     margin: 0px;
     padding: 0px;
+    box-sizing: border-box;
+}
+
+main,
+footer,
+.navbar {
+    background-color: #00072d;
 }
 
 .btn-primary:hover {
-    background-color: #2176f3
+    background-color: #2176f3;
 }
 
 a {
     text-decoration: none !important;
+}
+
+.gradient-custom-2 {
+    background: rgb(2, 0, 36);
+    background: linear-gradient(90deg,
+            rgba(2, 0, 36, 1) 0%,
+            rgba(9, 9, 121, 1) 35%,
+            rgba(0, 212, 255, 1) 100%);
+}
+
+.gradient-custom-2 {
+    border-bottom-right-radius: 0.3rem;
+    border-top-right-radius: 0.3rem;
+}
+
+@media (max-width: 769px) {
+    .gradient-custom-2 {
+        border-top-right-radius: 0rem;
+        border-bottom-left-radius: 0.3rem;
+    }
 }
