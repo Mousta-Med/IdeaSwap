@@ -16,12 +16,11 @@ use App\Http\Controllers\HomeController;
 */
 
 Auth::routes();
-Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/home', [HomeController::class, 'index'])->name('home');
-Route::get('/test', [HomeController::class, 'test']);
+Route::get('/', [PostsController::class, 'index']);
+Route::get('/home', [PostsController::class, 'index']);
+Route::get('/ideaswap', [PostsController::class, 'index']);
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/posts', [PostsController::class, 'index']);
     Route::get('/add-post', [PostsController::class, 'addpost']);
     Route::post('/save-post', [PostsController::class, 'savepost']);
     Route::get('/delete-post/{id}', [PostsController::class, 'deletepost']);

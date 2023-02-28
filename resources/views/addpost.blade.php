@@ -7,7 +7,7 @@
             {{ session()->get('success') }}
         </div>
     @endif
-    <div class="container">
+    <div class="container text-white">
         <form class="max-w-lg mx-auto" method="POST" action="{{ url('save-post') }}" enctype="multipart/form-data">
             @csrf
             <div class="mb-3">
@@ -32,9 +32,9 @@
                     <option value="tech">tech</option>
                 </select>
             </div>
-            <div class="d-flex justify-content-between px-2">
+            <div class="d-flex justify-content-between">
                 <input type="submit" class="btn btn-primary me-md-2" type="submit" value="Create Post">
-                <a href="{{ url('posts') }}" class="btn btn-danger">Back</a>
+                <a href="{{ url('') }}" class="btn btn-danger">Back</a>
             </div>
         </form>
     </div>
