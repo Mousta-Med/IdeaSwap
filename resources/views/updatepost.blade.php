@@ -8,6 +8,7 @@
         </div>
     @endif
     <div class="container text-white">
+        <h1 class="text-center">Update Your Post</h1>
         <form class="" method="POST" action="{{ url('edite-post') }}" enctype="multipart/form-data">
             @csrf
             <input type="hidden" name="post_id" value="{{ $data->id }}">
@@ -26,13 +27,13 @@
                 <input class="form-control" id="post_image" type="file" name="post_image">
             </div>
             <div class="mb-3">
-                <label class="form-label fw-bold" for="post_category">Post Category</label>
-                <select class="form-select" id="post_category" name="post_category">
-                    <option @if ($data->post_category === 'sport') selected @endif value="Sport">Sport</option>
-                    <option @if ($data->post_category === 'Kitchen') selected @endif value="Kitchen">Kitchen</option>
-                    <option @if ($data->post_category === 'gaming') selected= @endif value="gaming">Gaming</option>
-                    <option @if ($data->post_category === 'tech') selected @endif value="tech">Tech</option>
-                </select>
+                <label>Categories:</label>
+                <br>
+                @foreach ($categories as $category)
+                    <input type="checkbox" name="categories[]" value="{{ $category->id }}"
+                        @if ($data->categories->pluck('id')->contains($category->id)) checked @endif>
+                    {{ $category->name }}<br>
+                @endforeach
             </div>
             <div class="d-flex justify-content-between">
                 <button class="btn btn-primary me-md-2" type="submit">Update Post</button>

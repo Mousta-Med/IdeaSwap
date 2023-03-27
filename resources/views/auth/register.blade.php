@@ -15,7 +15,7 @@
                                             style="width: 280px; height:70px;" alt="logo">
                                         <h4 class="mt-1 mb-5 pb-1">Best Place To Find An Idea</h4>
                                     </div>
-                                    <form method="POST" action="{{ route('register') }}">
+                                    <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
                                         @csrf
                                         <p>Please create an account</p>
 
@@ -36,6 +36,18 @@
                                                 class="form-control @error('email') is-invalid @enderror" name="email"
                                                 value="{{ old('email') }}" required />
                                             @error('email')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
+                                        <div class="form-outline mb-4">
+                                            <label for="avatar" class="form-label">{{ __('Avatar') }}</label>
+                                            <input id="avatar" type="file"
+                                                class="form-control @error('avatar') is-invalid @enderror" name="avatar"
+                                                value="{{ old('avatar') }}" required autocomplete="avatar">
+
+                                            @error('avatar')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
                                                 </span>

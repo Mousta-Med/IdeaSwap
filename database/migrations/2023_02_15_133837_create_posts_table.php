@@ -16,10 +16,9 @@ return new class extends Migration
             $table->string('post_title');
             $table->string('post_description');
             $table->string('post_image');
-            $table->string('post_category');
-            $table->integer('post_reacts');
-            $table->string('post_owner');
+            $table->unsignedBigInteger('user_id');
             $table->timestamps();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

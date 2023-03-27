@@ -9,7 +9,6 @@
                         <div class="row g-0">
                             <div class="col-lg-6">
                                 <div class="card-body p-md-5 mx-md-4">
-
                                     <div class="text-center">
                                         <img src="/img/screencapture-logomaster-ai-app-edit-2023-02-23-23_36_34.jpg"
                                             style="width: 280px; height:70px;" alt="logo">

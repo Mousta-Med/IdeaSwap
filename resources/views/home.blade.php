@@ -7,76 +7,89 @@
             {{ session()->get('success') }}
         </div>
     @endif
-    <h1 class="text-3xl font-bold">Posts</h1>
-    <a href="{{ url('add-post') }}"><button
-            class="btn btn-primary text-white font-weight-bold py-2 px-4 rounded">ADD</button></a>
-    @foreach ($data as $post)
-        <div class="container mt-5 mb-5">
-            <div class="row d-flex align-items-center justify-content-center">
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="d-flex justify-content-between p-2 px-3">
-                            <div class="d-flex flex-row align-items-center">
-                                <img src="https://pixlr.com/images/index/remove-bg.webp" width="50"
-                                    class="rounded-circle">
-                                <div class="d-flex flex-column">
-                                    <span class="font-weight-bold">{{ $post->post_owner }}</span>
-                                    <small class="text-primary">{{ $post->post_category }}</small>
-                                </div>
+    <div class="container d-flex justify-content-between flex-row">
+        <div class="leftsidebar mt-5 text-center">
+            <div class="user-info">
+                <img src="/avatars/{{ Auth::user()->avatar }}" width="90" class="rounded-circle">
+                <h3 class="p-2">{{ Auth::user()->name }}</h3>
+                <h5>Follwing</h5>
+                <p>30</p>
+                <hr>
+                <h5>Follwers</h5>
+                <p>100</p>
+            </div>
+        </div>
+        <div class="container">
+            <div class="d-flex justify-content-center">
+                <div class="share_post d-flex justify-content-between mt-5">
+                    <img src="/avatars/{{ Auth::user()->avatar }}" width="50" class="rounded-circle">
+
+                    <form class="d-flex me-1" action="{{ route('search') }}" method="GET" role="search">
+                        <input class="form-control me-2" type="search" placeholder="Search" name="search"
+                            aria-label="Search" required>
+                        <button class="btn btn-outline-primary" type="submit">Search</button>
+                    </form>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal">Create Post</button>
+                </div>
+            </div>
+            <livewire:post-data :data="$data" />
+        </div>
+        <div class="rightsidebar mt-5 text-center">
+            <h4 class="pt-3 p-2">Top Posts</h4>
+            <hr>
+            <h5>test1</h5>
+            <h5>test1</h5>
+            <h5>test1</h5>
+            <h5>test1</h5>
+            <h5>test1</h5>
+            <h5>test1</h5>
+            <h5>test1</h5>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Create Post</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container text-white">
+                        <form class="max-w-lg mx-auto" method="POST" action="{{ url('save-post') }}"
+                            enctype="multipart/form-data">
+                            @csrf
+                            <div class="mb-3">
+                                <label class="form-label" for="post_title">Post Title</label>
+                                <input class="form-control" id="post_title" type="text" placeholder="Enter post title"
+                                    name="post_title" required>
                             </div>
-                            <div class="d-flex align-items-center mt-1 ellipsis">
-                                <small class="mr-2">{{ $post->created_at->diffForHumans() }}</small>
-                                <div class="dropdown">
-                                    <a class="dropdown-toggle dots" id="dropdownMenuButton" data-bs-toggle="dropdown"
-                                        aria-expanded="false">
-                                        <i class="fas fa-ellipsis-v"></i>
-                                    </a>
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <li><a href="{{ url('delete-post/' . $post->id) }}" class="dropdown-item">delete</a>
-                                        </li>
-                                        <li><a href="{{ url('update-post/' . $post->id) }}" class="dropdown-item">edite</a>
-                                        </li>
-                                    </ul>
-                                </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="post_description">Post Description</label>
+                                <textarea class="form-control" id="post_description" placeholder="Enter post description" name="post_desc" required></textarea>
                             </div>
-                        </div>
-                        <img src="/img/{{ $post->post_image }}" class="img-fluid">
-                        <div class="p-2">
-                            <p class="text-justify">{{ $post->post_description }}.</p>
-                            <hr>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex flex-row icons d-flex align-items-center">
-                                    <i class="fa fa-heart"></i>
-                                </div>
-                                <div class="d-flex flex-row muted-color">
-                                    <p>{{ $post->post_reacts }}</p>
-                                    <a href=""><i class="fas fa-share"></i></a>
-                                    <a href=""><i class="fas fa-comment"></i></a>
-                                </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="post_image">Post Image</label>
+                                <input class="form-control" id="post_image" type="file" name="post_image" required>
                             </div>
-                            <hr>
-                            <div class="comments">
-                                <div class="d-flex flex-row mb-2">
-                                    <img src="https://burst.shopifycdn.com/photos/woman-dressed-in-white-leans-against-a-wall.jpg?width=1200&format=pjpg&exif=0&iptc=0"
-                                        width="40" class="rounded-image">
-                                    <div class="d-flex flex-column ml-2"> <span class="name">Elizabeth goodmen</span>
-                                        <small class="comment-text">Thanks for sharing!</small>
-                                        <div class="d-flex flex-row align-items-center status"> <small>Like</small>
-                                            <small>Reply</small> <small>Translate</small> <small>8 mins</small>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="comment-input">
-                                    <input type="text" class="form-control">
-                                    <div class="fonts">
-                                        <a href=""><i class="fas fa-paper-plane"></i></a>
-                                    </div>
-                                </div>
+                            <div class="mb-3 text-black">
+                                <label>Categories:</label>
+                                <br>
+                                @foreach ($categories as $category)
+                                    <input type="checkbox" name="categories[]" value="{{ $category->id }}">
+                                    {{ $category->name }}<br>
+                                @endforeach
                             </div>
-                        </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <input type="submit" class="btn btn-primary me-md-2" type="submit" value="Create Post">
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
-    @endforeach
+    </div>
 @endsection

@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800&display=swap");
+
 * {
     margin: 0px;
     padding: 0px;
@@ -5,9 +7,12 @@
 }
 
 main,
-footer,
+footer {
+    background-color: #0D1821;
+}
+
 .navbar {
-    background-color: #00072d;
+    background-color: #344966;
 }
 
 .btn-primary:hover {
@@ -31,14 +36,7 @@ a {
     border-top-right-radius: 0.3rem;
 }
 
-@media (max-width: 769px) {
-    .gradient-custom-2 {
-        border-top-right-radius: 0rem;
-        border-bottom-left-radius: 0.3rem;
-    }
-}
 
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800&display=swap");
 
 body {
     background-color: #eee;
@@ -47,7 +45,7 @@ body {
 }
 
 .card {
-    border: none;
+    border: none !important;
 }
 
 .ellipsis {
@@ -130,4 +128,66 @@ hr {
 
 .dots:after {
     display: none !important;
+}
+
+.share_post {
+    width: 502px;
+    background-color: white;
+    align-items: center;
+    border-radius: .375rem;
+    padding: 20px 15px;
+    border-top: 15px solid #344966;
+}
+
+.username {
+    font-size: 20px;
+}
+
+
+.leftsidebar {
+    background: #B4CDED;
+    width: 30%;
+    border-radius: .375rem;
+    border-top: #344966 solid 80px;
+    height: max-content;
+}
+
+
+.leftsidebar .user-info {
+    position: relative;
+    top: -45px;
+}
+
+.rightsidebar {
+    height: max-content;
+    background: #B4CDED;
+    width: 30%;
+    border-radius: .375rem;
+    border-top: 15px solid #344966;
+}
+
+.category {
+    background-color: #F0F4EF;
+    border-radius: 15px;
+    padding: 5px 10px;
+}
+
+/* .img-fluid {
+    height: 500px !important;
+} */
+
+@media (max-width: 769px) {
+    .gradient-custom-2 {
+        border-top-right-radius: 0rem;
+        border-bottom-left-radius: 0.3rem;
+    }
+
+    .leftsidebar,
+    .rightsidebar {
+        display: none;
+    }
+
+    .row>* {
+        padding: 0% !important;
+    }
 }

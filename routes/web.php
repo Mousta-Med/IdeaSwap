@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostsController;
 use App\Http\Controllers\HomeController;
@@ -16,14 +17,15 @@ use App\Http\Controllers\HomeController;
 */
 
 Auth::routes();
-Route::get('/', [PostsController::class, 'index']);
-Route::get('/home', [PostsController::class, 'index']);
-Route::get('/ideaswap', [PostsController::class, 'index']);
 
 Route::middleware(['auth'])->group(function () {
+    Route::get('/', [PostsController::class, 'index']);
+    Route::get('/home', [PostsController::class, 'index']);
+    Route::get('/ideaswap', [PostsController::class, 'index']);
     Route::get('/add-post', [PostsController::class, 'addpost']);
     Route::post('/save-post', [PostsController::class, 'savepost']);
     Route::get('/delete-post/{id}', [PostsController::class, 'deletepost']);
     Route::get('/update-post/{id}', [PostsController::class, 'updatepost']);
     Route::post('/edite-post', [PostsController::class, 'editepost']);
+    Route::get('/search/', 'PostsController@search')->name('search');
 });

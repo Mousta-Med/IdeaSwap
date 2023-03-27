@@ -2,15 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Categories;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Posts;
+use App\Models\User;
 
 class PostsController extends Controller
 {
     public function index()
     {
-        $data = Posts::get();
-        return view('home', compact('data'));
+        $data = Posts::with('Likes.Users')->latest()->get();
+        $categories = Categories::get();
+
+        return view('home', compact('data', 'categories'));
     }
     public function addpost()
     {
@@ -18,12 +23,12 @@ class PostsController extends Controller
     }
     public function savepost(Request $request)
     {
-        // $request->validate([
-        //     'title' => 'required',
-        //     'image' => 'required',
-        //     'description' => 'required',
-        //     'category' => 'required',
-        // ]);
+        $request->validate([
+            'post_title' => 'required|string',
+            'post_image' => 'required|image',
+            'post_desc' => 'required|string',
+            'categories' => 'required|array',
+        ]);
 
         $image_extension = $request->post_image->getClientOriginalExtension();
         $image = time() . '.' . $image_extension;
@@ -31,16 +36,16 @@ class PostsController extends Controller
         $request->post_image->move($path, $image);
         $title = $request->post_title;
         $description = $request->post_desc;
-        $category = $request->post_category;
+        $categories = $request->categories;
+        $user = Auth::id();
 
         $post = new Posts();
         $post->post_title = $title;
         $post->post_description = $description;
-        $post->post_category = $category;
         $post->post_image = $image;
-        $post->post_reacts = 0;
-        $post->post_owner = "test";
+        $post->user_id = $user;
         $post->save();
+        $post->Categories()->attach($categories);
 
         return redirect()->back()->with('success', 'post added successfuly');
     }
@@ -53,44 +58,79 @@ class PostsController extends Controller
     public function updatepost($id)
     {
         $data = Posts::where('id', '=', $id)->first();
+        $categories = Categories::get();
         if (!$data) {
             abort("404");
         } else {
-            return view('updatepost', compact('data'));
+            return view('updatepost', compact('data', 'categories'));
         }
     }
     public function editepost(Request $request)
     {
-        if (isset($request->post_image)) {
+        // if (isset($request->post_image)) {
+        //     $image_extension = $request->post_image->getClientOriginalExtension();
+        //     $image = time() . '.' . $image_extension;
+        //     $path = 'img';
+        //     $request->post_image->move($path, $image);
+        // }
+        // $title = $request->post_title;
+        // $description = $request->post_desc;
+        // $category = $request->post_category;
+
+        // if (isset($image)) {
+        //     Posts::where('id', '=', $id)->update([
+        //         'post_title' => $title,
+        //         'post_description' => $description,
+        //         'post_image' => $image,
+        //     ]);
+        //     $categories = $request->input('categories');
+
+        //     $post->Categories()->attach($categories);
+        // } else {
+        //     Posts::where('id', '=', $id)->update([
+        //         'post_title' => $title,
+        //         'post_description' => $description,
+        //     ]);
+        //     $categories = $request->input('categories');
+
+        //     $post->Categories()->attach($categories);
+        // }
+
+        // return redirect()->back()->with('success', 'post updated successfuly');
+        $id = $request->post_id;
+        $request->validate([
+            'post_title' => 'required|string',
+            'post_desc' => 'required|string',
+        ]);
+
+        if (!$post = Posts::find($id)) {
+            return redirect()->back()->with('danger', 'Post not found');
+        }
+
+        $image = $post->post_image;
+        if ($request->hasFile('post_image')) {
+            $request->validate([
+                'post_image' => 'image',
+            ]);
             $image_extension = $request->post_image->getClientOriginalExtension();
             $image = time() . '.' . $image_extension;
             $path = 'img';
             $request->post_image->move($path, $image);
         }
+
         $title = $request->post_title;
         $description = $request->post_desc;
-        $category = $request->post_category;
-        $id = $request->post_id;
+        $categories = $request->input('categories');
+        $user = Auth::id();
 
-        if (isset($image)) {
-            Posts::where('id', '=', $id)->update([
-                'post_title' => $title,
-                'post_description' => $description,
-                'post_category' => $category,
-                'post_image' => $image,
-                'post_reacts' => 0,
-                'post_owner' => "test"
-            ]);
-        } else {
-            Posts::where('id', '=', $id)->update([
-                'post_title' => $title,
-                'post_description' => $description,
-                'post_category' => $category,
-                'post_reacts' => 0,
-                'post_owner' => "test"
-            ]);
-        }
+        $post->post_title = $title;
+        $post->post_description = $description;
+        $post->post_image = $image;
+        $post->user_id = $user;
+        $post->save();
 
-        return redirect()->back()->with('success', 'post updated successfuly');
+        $post->Categories()->sync($categories);
+
+        return redirect()->back()->with('success', 'Post updated successfully');
     }
 }
