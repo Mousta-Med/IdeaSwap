@@ -19,6 +19,7 @@
     <!-- Scripts -->
     <script src="//unpkg.com/alpinejs" defer></script>
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    @livewireStyles
 </head>
 
 <body>

@@ -1,4 +1,16 @@
 <div class="container">
+    <div class="d-flex justify-content-center">
+        <div class="share_post d-flex justify-content-between mt-5">
+            <img src="/avatars/{{ Auth::user()->avatar }}" width="50" class="rounded-circle">
+            {{-- <form wire:submit.prevent="search">
+                <input class="form-control me-1" type="search" wire:model="search" placeholder="Search">
+                <button class="btn btn-outline-primary" type="submit">Search</button>
+            </form> --}}
+            <input class="form-control me-1" type="search" wire:model="search" placeholder="Search">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Create
+                Post</button>
+        </div>
+    </div>
     @foreach ($data as $post)
         <div class="row d-flex align-items-center justify-content-center my-5">
             <div class="col-md-8">

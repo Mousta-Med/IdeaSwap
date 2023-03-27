@@ -20,19 +20,6 @@
             </div>
         </div>
         <div class="container">
-            <div class="d-flex justify-content-center">
-                <div class="share_post d-flex justify-content-between mt-5">
-                    <img src="/avatars/{{ Auth::user()->avatar }}" width="50" class="rounded-circle">
-
-                    <form class="d-flex me-1" action="{{ route('search') }}" method="GET" role="search">
-                        <input class="form-control me-2" type="search" placeholder="Search" name="search"
-                            aria-label="Search" required>
-                        <button class="btn btn-outline-primary" type="submit">Search</button>
-                    </form>
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                        data-bs-target="#exampleModal">Create Post</button>
-                </div>
-            </div>
             <livewire:post-data :data="$data" />
         </div>
         <div class="rightsidebar mt-5 text-center">

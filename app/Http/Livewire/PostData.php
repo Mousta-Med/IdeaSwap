@@ -15,9 +15,6 @@ class PostData extends Component
 
     public function mount()
     {
-        $data = Posts::with('Likes.Users')->latest()->get();
-        $this->data = $data;
-        $this->postUserLike($this->data);
     }
 
     public function likePost($id)
@@ -49,9 +46,26 @@ class PostData extends Component
             $post->liked = $islike;
         }
     }
+    public function search()
+    {
+        $this->data = Posts::with('Likes.Users')
+            ->where('post_title', 'LIKE', '%' . $this->search . '%')
+            ->latest()->get();
+        $this->postUserLike($this->data);
+    }
 
     public function render()
     {
-        return view('livewire.post-data');
+
+
+        $data = Posts::with('Likes.Users')->latest();
+
+        if ($this->search) {
+            $data->where('post_title', 'like', '%' . $this->search . '%');
+        }
+
+        $this->data = $data->get();
+        $this->postUserLike($this->data);
+        return view('livewire.post-data', ['data' => $this->data]);
     }
 }
