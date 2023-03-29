@@ -7,15 +7,19 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Posts;
 use App\Models\User;
+use App\Models\Like;
 
 class PostsController extends Controller
 {
     public function index()
     {
+        $posts = Posts::withCount('Likes')
+            ->orderByDesc('likes_count')
+            ->get();
         $data = Posts::with('Likes.Users')->latest()->get();
         $categories = Categories::get();
 
-        return view('home', compact('data', 'categories'));
+        return view('home', compact('data', 'categories', 'posts'));
     }
     public function addpost()
     {
@@ -67,36 +71,6 @@ class PostsController extends Controller
     }
     public function editepost(Request $request)
     {
-        // if (isset($request->post_image)) {
-        //     $image_extension = $request->post_image->getClientOriginalExtension();
-        //     $image = time() . '.' . $image_extension;
-        //     $path = 'img';
-        //     $request->post_image->move($path, $image);
-        // }
-        // $title = $request->post_title;
-        // $description = $request->post_desc;
-        // $category = $request->post_category;
-
-        // if (isset($image)) {
-        //     Posts::where('id', '=', $id)->update([
-        //         'post_title' => $title,
-        //         'post_description' => $description,
-        //         'post_image' => $image,
-        //     ]);
-        //     $categories = $request->input('categories');
-
-        //     $post->Categories()->attach($categories);
-        // } else {
-        //     Posts::where('id', '=', $id)->update([
-        //         'post_title' => $title,
-        //         'post_description' => $description,
-        //     ]);
-        //     $categories = $request->input('categories');
-
-        //     $post->Categories()->attach($categories);
-        // }
-
-        // return redirect()->back()->with('success', 'post updated successfuly');
         $id = $request->post_id;
         $request->validate([
             'post_title' => 'required|string',

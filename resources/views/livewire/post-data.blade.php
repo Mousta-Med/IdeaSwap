@@ -1,12 +1,18 @@
-<div class="container">
+<div class="">
     <div class="d-flex justify-content-center">
         <div class="share_post d-flex justify-content-between mt-5">
             <img src="/avatars/{{ Auth::user()->avatar }}" width="50" class="rounded-circle">
-            {{-- <form wire:submit.prevent="search">
+            <div class="">
                 <input class="form-control me-1" type="search" wire:model="search" placeholder="Search">
-                <button class="btn btn-outline-primary" type="submit">Search</button>
-            </form> --}}
-            <input class="form-control me-1" type="search" wire:model="search" placeholder="Search">
+            </div>
+            <div class="me-1">
+                <select class="form-control" id="category" wire:model="category">
+                    <option value="">All Categories</option>
+                    @foreach ($categories as $category)
+                        <option value="{{ $category->name }}">{{ $category->name }}</option>
+                    @endforeach
+                </select>
+            </div>
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Create
                 Post</button>
         </div>
@@ -67,20 +73,39 @@
                         </button>
                         <span>{{ $post->Likes->count() }} {{ Str::plural('like', $post->Likes->count()) }}</span>
                         <hr>
-                        <div class="comments">
-                            <div class="d-flex flex-row mb-2">
-                                <img src="https://burst.shopifycdn.com/photos/woman-dressed-in-white-leans-against-a-wall.jpg?width=1200&format=pjpg&exif=0&iptc=0"
-                                    width="40" class="rounded-image">
-                                <div class="d-flex flex-column ml-2"> <span class="name">Elizabeth
-                                        goodmen</span>
-                                    <small class="comment-text">Thanks for sharing!</small>
+                        <div class="commnet-section">
+                            <form wire:submit.prevent="addComment({{ $post->id }})">
+                                <div class="comment-input mb-3 input-group">
+                                    <input type="text" class="form-control" placeholder="Add a comment..."
+                                        wire:model="newComment">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary" type="button"
+                                            wire:click="addComment({{ $post->id }})">Post</button>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="comment-input">
-                                <input type="text" class="form-control">
-                                <div class="fonts">
-                                    <a href=""><i class="fas fa-paper-plane"></i></a>
-                                </div>
+                            </form>
+                            <div class="comments">
+                                @foreach ($post->comments as $comment)
+                                    <div class="comment d-flex justify-content-between align-items-center">
+                                        <div class="d-flex flex-row mb-2">
+                                            <img src="/avatars/{{ $comment->Users->avatar }}" width="40"
+                                                class="rounded-image">
+                                            <div class="d-flex flex-column ml-2">
+                                                <div>
+                                                    <span class="name">{{ $comment->Users->name }}</span>
+                                                    <small class="text-primary"><i class="fas fa-clock"></i>
+                                                        {{ $comment->created_at->diffForHumans() }}</small>
+                                                </div>
+                                                <small class="comment-text">{{ $comment->comment }}</small>
+                                            </div>
+                                        </div>
+                                        @if ($comment->user_id == Auth::user()->id)
+                                            <div class="btn" wire:click="deleteComment({{ $comment->id }})">
+                                                <i class="fas fa-trash" style="color: #0d6efd"></i>
+                                            </div>
+                                        @endif
+                                    </div>
+                                @endforeach
                             </div>
                         </div>
                     </div>

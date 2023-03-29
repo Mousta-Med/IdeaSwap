@@ -2,6 +2,8 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\Categories;
+use App\Models\Comments;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Like;
@@ -12,9 +14,14 @@ class PostData extends Component
 {
     public $data;
     public $search;
+    public $category;
+    public $categories;
+    public $newComment;
+
 
     public function mount()
     {
+        $this->categories = Categories::all();
     }
 
     public function likePost($id)
@@ -29,8 +36,6 @@ class PostData extends Component
                 'post_id' => $id
             ]);
         }
-        $this->data = Posts::with('Likes.Users')->latest()->get();
-        $this->postUserLike($this->data);
     }
 
     public function postUserLike($data)
@@ -46,22 +51,42 @@ class PostData extends Component
             $post->liked = $islike;
         }
     }
-    public function search()
-    {
-        $this->data = Posts::with('Likes.Users')
-            ->where('post_title', 'LIKE', '%' . $this->search . '%')
-            ->latest()->get();
-        $this->postUserLike($this->data);
-    }
 
+    public function addComment($postId)
+    {
+        $user = Auth::user();
+        $content = $this->newComment;
+        $comment = new Comments();
+        $comment->comment = $content;
+        $comment->user_id = $user->id;
+        $comment->post_id = $postId;
+        $comment->save();
+        $this->newComment = "";
+    }
+    public function deleteComment($commentId)
+    {
+        $comment = Comments::findOrFail($commentId);
+
+        // Check if the current user is authorized to delete the comment
+        if ($comment->user_id !== Auth::user()->id) {
+            // Throw an exception or display an error message here
+            return;
+        }
+
+        // Delete the comment
+        $comment->delete();
+    }
     public function render()
     {
-
-
-        $data = Posts::with('Likes.Users')->latest();
+        $data = Posts::with('Likes.Users', 'Comments.Users')->latest();
 
         if ($this->search) {
             $data->where('post_title', 'like', '%' . $this->search . '%');
+        }
+        if ($this->category) {
+            $data->whereHas('categories', function ($query) {
+                $query->where('name', $this->category);
+            });
         }
 
         $this->data = $data->get();

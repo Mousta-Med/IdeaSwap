@@ -12,11 +12,11 @@
             <div class="user-info">
                 <img src="/avatars/{{ Auth::user()->avatar }}" width="90" class="rounded-circle">
                 <h3 class="p-2">{{ Auth::user()->name }}</h3>
-                <h5>Follwing</h5>
-                <p>30</p>
+                <h5>Likes</h5>
+                <p>{{ Auth::user()->Likes->count() }}</p>
                 <hr>
-                <h5>Follwers</h5>
-                <p>100</p>
+                <h5>Comments</h5>
+                <p>{{ Auth::user()->Comments->count() }}</p>
             </div>
         </div>
         <div class="container">
@@ -25,13 +25,12 @@
         <div class="rightsidebar mt-5 text-center">
             <h4 class="pt-3 p-2">Top Posts</h4>
             <hr>
-            <h5>test1</h5>
-            <h5>test1</h5>
-            <h5>test1</h5>
-            <h5>test1</h5>
-            <h5>test1</h5>
-            <h5>test1</h5>
-            <h5>test1</h5>
+            @foreach ($posts as $toppost)
+                <div class="text-start ps-2 text-wrap">
+                    <h5 class="fw-bold">{{ $toppost->post_title }}</h5>
+                    <p>{{ $toppost->post_description }}</p>
+                </div>
+            @endforeach
         </div>
     </div>
 

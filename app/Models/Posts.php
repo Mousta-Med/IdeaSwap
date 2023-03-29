@@ -20,9 +20,9 @@ class Posts extends Model
     {
         return $this->belongsToMany(Categories::class, 'category_post', 'post_id', 'category_id');
     }
-    // public function Comments()
-    // {
-    //     return $this->hasMany(Comments::class, 'post_id');
-    // }
+    public function Comments()
+    {
+        return $this->hasMany(Comments::class, 'post_id')->latest();
+    }
     use HasFactory;
 }
