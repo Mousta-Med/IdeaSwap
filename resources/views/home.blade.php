@@ -17,11 +17,13 @@
                 <hr>
                 <h5>Comments</h5>
                 <p>{{ Auth::user()->Comments->count() }}</p>
+
             </div>
         </div>
         <div class="container">
             <livewire:post-data :data="$data" />
         </div>
+
         <div class="rightsidebar mt-5 text-center">
             <h4 class="pt-3 p-2">Top Posts</h4>
             <hr>
