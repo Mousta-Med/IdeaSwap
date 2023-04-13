@@ -34,8 +34,7 @@ class PostsController extends Controller
             'categories' => 'required|array',
         ]);
 
-        $image_extension = $request->post_image->getClientOriginalExtension();
-        $image = time() . '.' . $image_extension;
+        $image = $request->image->getClientOriginalName();
         $path = 'img';
         $request->post_image->move($path, $image);
         $title = $request->post_title;
